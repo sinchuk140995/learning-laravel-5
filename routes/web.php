@@ -14,7 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('foo', ['middleware' => 'manager', function () {
+    return 'this page only be viewed by managers';
+}]);
 
+// Route::get('about', ['middleware' => 'auth', 'uses' => 'PageController@about']);
 Route::get('about', 'PageController@about');
 Route::get('contact', 'PageController@contact');
 
@@ -24,3 +28,7 @@ Route::get('contact', 'PageController@contact');
 // Route::post('articles', 'ArticlesController@store');
 
 Route::resource('articles', 'ArticlesController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

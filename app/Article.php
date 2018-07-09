@@ -17,12 +17,12 @@ class Article extends Model
         $this->attributes['published_at'] = Carbon::parse($date);
     }
 
-    public function scopePubslished($query)
+    public function scopePublished($query)
     {
         return $query->where('published_at', '<=', Carbon::now());
     }
 
-    public function scopeUnpubslished($query)
+    public function scopeUnpublished($query)
     {
         return $query->where('published_at', '>', Carbon::now());
     }
@@ -30,6 +30,11 @@ class Article extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
 }

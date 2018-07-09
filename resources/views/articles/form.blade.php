@@ -1,5 +1,3 @@
-{!! Form::hidden('user_id', 1) !!}
-
 <div class="form-group">
   {!! Form::label('title', 'Title:') !!}
   {!! Form::text('title', null, ['class' => 'form-control']) !!}
@@ -13,6 +11,11 @@
 <div class="form-group">
   {!! Form::label('published_at', 'Publish on:') !!}
   {!! Form::input('date', 'published_at', Carbon\Carbon::now()->format('Y-m-d'), ['class' => 'form-control']) !!}
+</div>
+
+<div class="form-group">
+  {!! Form::label('tags', 'Tags:') !!}
+  {!! Form::select('tags[]', $tags, null, ['class' => 'form-control', 'multiple']) !!}
 </div>
 
 <div class="form-group">
