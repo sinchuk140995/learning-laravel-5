@@ -44,14 +44,14 @@ class ArticlesController extends Controller
     {
         // $article = new Article($request->all());
         // Auth::user()->articles()->save($article);
-        $article = Auth::user()->articles()->create($request->all());
 
-        $article->tags()->attach($request->input('tags'));
+        $this->createArticle($request);
 
         // $this->validate($request, ['title' => 'required|min:3', 'body' => 'required']);  // without ArticleRequest form-request
         // Article::create($request->all());
 
-        flash()->overlay('Your article has been created.', 'Good job!');
+        // flash()->overlay('Your article has been created.', 'Good job!');
+        flash('Your article has been created.');
 
         return redirect('articles');
     }
@@ -59,8 +59,8 @@ class ArticlesController extends Controller
     public function edit(Article $article)
     {
         // $article = Article::findOrFail($id);
-
-        return view('articles.edit', compact('article'));
+        $tags = Tag::pluck('name', 'id');
+        return view('articles.edit', compact('article', 'tags'));
     }
 
     public function update(ArticleRequest $request, Article $article)
@@ -69,6 +69,24 @@ class ArticlesController extends Controller
 
         $article->update($request->all());
 
+        $this->syncTags($article, $request->input('tags'));
+        // $article->tags()->sync($request->input('tags'));
+
         return redirect('articles');
+    }
+
+    private function syncTags(Article $article, array $tags)
+    {
+        $article->tags()->sync($tags);
+    }
+
+    private function createArticle(ArticleRequest $request)
+    {
+        $article = Auth::user()->articles()->create($request->all());
+
+        $this->syncTags($article, $request->input('tags'));
+        // $article->tags()->attach($request->input('tags'));
+
+        return $article;
     }
 }
